@@ -1,0 +1,3 @@
+这个文件夹里存放的是陨石相关的代码
+SingletonBase.cs存放单例基类
+MeteoriteCreateSystem.cs为陨石生成系统相关代码
