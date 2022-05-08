@@ -890,11 +890,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6cd1d6a1d1b5e248a9f6004fb00e301, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Meteorite: {fileID: 0}
+  Meteorite: {fileID: 8244427958740683749, guid: 48de30ae7a2389945906ecfb352ba953, type: 3}
+  MeteortieFather: {fileID: 0}
   cMode: 0
   Area:
-  - p1: {x: 0.13, y: -5.57}
-    p2: {x: 0.44, y: 5.24}
-  - p1: {x: -0.13, y: -5.57}
-    p2: {x: -0.44, y: 5.24}
+  - vector1: {x: 0, y: -5.11}
+    vector2: {x: 0, y: 9.3}
+  - vector1: {x: 0, y: 0}
+    vector2: {x: 0, y: 0}
   isCreating: 0
