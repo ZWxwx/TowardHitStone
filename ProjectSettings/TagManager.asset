@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - HeadPosition
+  - Bullet
   layers:
   - Default
   - TransparentFX
