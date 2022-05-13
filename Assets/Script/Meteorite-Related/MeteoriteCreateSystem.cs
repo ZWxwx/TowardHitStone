@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum player //全局枚举 用来判断为那个玩家生成的内容
+public enum playerEnum //全局枚举 用来判断为那个玩家生成的内容
 { 
-    pl=0,
-    p2=1
+    pL=0,
+    pR=1
 }
 public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
 {
@@ -13,7 +13,9 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
     public GameObject Meteorite;//陨石
     [Header("陨石父对象")]
     public GameObject MeteortieFather;
-
+    [SerializeField]
+    [Header("陨石速度")]
+    public float XspeedMin,XspeedMax,YspeedMin,YspeedMax;
     public enum creatingMode//生成的模式
     { 
         empty,//默认无模式
@@ -30,10 +32,13 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
     }
     [Header("是否开始生成")]
     public bool isCreating;//控制是否生成
+
+    Player p1, p2;
     // Start is called before the first frame update
     void Start()
     {
-        
+        p1 = new Player(playerEnum.pL, Area[0]);
+        p2 = new Player(playerEnum.pR, Area[1]);
     }
 
     // Update is called once per frame
@@ -47,17 +52,15 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
     }
 
     [EditorButton]
-    public GameObject CreateMeteorite(player _player=player.pl)
+    void Debug_Test()
     {
-        Rectangle AreaNow=Area[0];
-        switch (_player)
-        {
-            case player.pl:AreaNow = Area[0];break;
-            case player.p2:AreaNow = Area[1]; break;
-        }
+        CreateMeteorite(p1);        
+    }
+    public GameObject CreateMeteorite(Player player)
+    {
         float getX()
         {
-            return (AreaNow.vector1.x - AreaNow.vector2.x) / 2 - AreaNow.vector1.x;
+            return (player.Area.vector1.x - player.Area.vector2.x) / 2 - player.Area.vector1.x;
         }
         GameObject met;
         Transform tr;
@@ -68,19 +71,43 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         else {
             tr = MeteortieFather.transform;
         }
-        met = Instantiate(Meteorite,tr);
-        var t = RandomPosGenerateForY(AreaNow);
+        met = Instantiate(Meteorite,tr);//生成陨石对象
+        var t = RandomPosGenerateForY(player.Area);
         met.transform.position=new Vector3(getX(),t,0);
+        giveSpeedAndDirection(met,player);
         //Debug.Log(t);
         return met;
     }
+
+    void giveSpeedAndDirection(GameObject met, Player player)//初始速度以及方向调整
+    {
+        Rigidbody2D Rb;
+        //如果没有2D刚体组件 则创建一个 不过好像这里不太能实现
+        Rb = met.GetComponent<Rigidbody2D>() ?? met.AddComponent<Rigidbody2D>();
+        int dir=0;
+        switch (player.tag)
+        {
+            case playerEnum.pL: dir = -1; break;
+            case playerEnum.pR: dir = 1; break;
+        }
+
+        Vector2 Ydir = new Vector2((player.Area.vector1.x + player.Area.vector2.x) / 2 - met.transform.position.x,
+            (player.Area.vector1.y + player.Area.vector2.y) / 2 - met.transform.position.y);
+
+        Rb.velocity = new Vector2(Random.Range(XspeedMin,XspeedMax)*dir, Random.Range(YspeedMin, YspeedMax) * Ydir.y);
+
+    }
+
+    
     /// <summary>
     /// 以下为生成陨石位置的随机生成代码，需要优化请在此修改
     /// </summary>
     /// <returns></returns>
     float RandomPosGenerateForY(Rectangle _Area)//因为目前本项目与X位置无关，暂时只随机Y轴
     {
-        
+        ///
+        //正态分布写到吐血 不用了
+        /*
         float BoxMuller()//正太分布函数 BoxMuller转化法
         {
             float p1, p2,w=0.0f,c;
@@ -100,10 +127,23 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         float Position;
         Position = Mathf.Max(_Area.vector1.y, _Area.vector2.y) - BoxMuller() * Mathf.Abs(_Area.vector1.y - _Area.vector2.y);
         return Position;
+        */
+        float Position;
+        Position = Mathf.Max(_Area.vector1.y, _Area.vector2.y) - Random.Range(0.01f,0.99f) * Mathf.Abs(_Area.vector1.y - _Area.vector2.y);
+        return Position;
 
 
     }
-    
+   public class Player//玩家类
+    {
+        public playerEnum tag;
+        public Rectangle Area;//对应的生成区域
+        public Player(playerEnum a,Rectangle b)
+        {
+            tag = a;
+            Area = b;
+        }
+    }
 }
 
 

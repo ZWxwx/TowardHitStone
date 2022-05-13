@@ -2764,10 +2764,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Meteorite: {fileID: 8244427958740683749, guid: 48de30ae7a2389945906ecfb352ba953, type: 3}
   MeteortieFather: {fileID: 0}
+  XspeedMin: 1
+  XspeedMax: 2
+  YspeedMin: 1
+  YspeedMax: 2
   cMode: 0
   Area:
-  - vector1: {x: 0, y: -5.11}
-    vector2: {x: 0, y: 9.3}
-  - vector1: {x: 0, y: 0}
-    vector2: {x: 0, y: 0}
+  - vector1: {x: 1.09, y: -5}
+    vector2: {x: 0, y: 4.92}
+  - vector1: {x: -1.39, y: -5.26}
+    vector2: {x: -0.19, y: 4.92}
   isCreating: 0
