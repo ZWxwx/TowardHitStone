@@ -5,19 +5,33 @@ using UnityEngine.UI;
 
 public class UIItem : MonoBehaviour
 {
+    public UIItemPlane itemPlane;
     public Item item;
-    // Start is called before the first frame update
+    public Text numText;
+	// Start is called before the first frame update
 
-    public void Init()
+	public void Start()
+	{
+	}
+	public void Init()
 	{
         this.GetComponent<Image>().overrideSprite = Resources.Load<Sprite>(item.sprite);
-        
-    }
+		this.numText.text = item.count.ToString();
+	}
 
-	public void Update()
+	public void UpdateInfo()
 	{
-        //if(this.GetComponent<Image>().overrideSprite!=null)
-        //    Debug.Log(this.GetComponent<Image>().overrideSprite.);
+		if (item.count == 0)
+		{
+			itemPlane.UpdateInfo();
+			return;
+		}
+		this.numText.text = item.count.ToString();
+		
+	}
 
-    }
+	public void OnDestroy()
+	{
+		item.OnUsed -= UpdateInfo;
+	}
 }

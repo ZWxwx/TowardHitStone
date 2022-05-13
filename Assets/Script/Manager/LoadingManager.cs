@@ -8,9 +8,11 @@ public class LoadingManager : MonoBehaviour
     void Start()
     {
         //User user = new User();
-        User.Single.player1_items.Add(new Item(ItemType.Explodable_nextBomb,sprite:"Sprite/Icon1"));
-        User.Single.player1_items.Add(new Item(ItemType.Freezing));
-        User.Single.player2_items.Add(new Item(ItemType.None));
+        User.Instance.player1_items.Add(new Item(ItemType.Explodable_nextBomb,PlayerType.Player1,count:2,sprite:"Sprite/Icon1"));
+        User.Instance.player1_items.Add(new Item(ItemType.Tracking, PlayerType.Player1, count: 3, sprite: "Sprite/Icon2"));
+        User.Instance.player1_items.Add(new Item(ItemType.Explodable_nextBomb, PlayerType.Player1, count: 4, sprite: "Sprite/Icon1"));
+        User.Instance.player1_items.Add(new Item(ItemType.Freezing, PlayerType.Player1));
+        User.Instance.player2_items.Add(new Item(ItemType.None,  PlayerType.Player2, count: 5));
         Load();
     }
     // Update is called once per frame
@@ -21,11 +23,11 @@ public class LoadingManager : MonoBehaviour
 
     void Load()
 	{
-        UIItemPlane ui1= ItemManager.Single.itemPlane1.GetComponent<UIItemPlane>();
-        UIItemPlane ui2 = ItemManager.Single.itemPlane2.GetComponent<UIItemPlane>();
-        ui1.items = User.Single.player1_items;
-        ui2.items = User.Single.player2_items;
-        ui1.Init();
-        ui2.Init();
+        UIItemPlane ui1= ItemManager.Instance.itemPlane1.GetComponent<UIItemPlane>();
+        UIItemPlane ui2 = ItemManager.Instance.itemPlane2.GetComponent<UIItemPlane>();
+        ItemManager.Instance.itemsPlayer1= User.Instance.player1_items;
+        ItemManager.Instance.itemsPlayer2 = User.Instance.player2_items;
+        ui1.UpdateInfo();
+        ui2.UpdateInfo();
     }
 }
