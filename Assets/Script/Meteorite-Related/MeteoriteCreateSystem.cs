@@ -51,6 +51,19 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
 
     }
 
+#if UNITY_EDITOR
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        UnityEditor.Handles.color = Color.green;
+        for(int i = 0; i < Area.Length; i++)
+		{
+            UnityEditor.Handles.DrawWireCube((Area[i].vector1 + Area[i].vector2) / 2, Area[i].vector1 - Area[i].vector2);
+        }
+        //UnityEditor.Handles.ArrowHandleCap(0, this.transform.position, this.transform.rotation, 1f, EventType.Repaint);
+    }
+#endif
+
     [EditorButton]
     void Debug_Test()
     {
@@ -152,6 +165,7 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
 public class Rectangle //矩形类 可以不用 但是最近C++学了 还是用一下
 {
     public Vector2 vector1, vector2;
+
     Rectangle(float x1,float y1,float x2,float y2)
     {
         vector1 = new Vector2(x1, y1);

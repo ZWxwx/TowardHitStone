@@ -1741,6 +1741,8 @@ GameObject:
   - component: {fileID: 1012876194}
   - component: {fileID: 1012876195}
   - component: {fileID: 1012876193}
+  - component: {fileID: 1012876196}
+  - component: {fileID: 1012876197}
   m_Layer: 0
   m_Name: System
   m_TagString: Untagged
@@ -1789,6 +1791,31 @@ MonoBehaviour:
   itemPlane1: {fileID: 316158624}
   itemPlane2: {fileID: 1029765106}
   itemPrefab: {fileID: 0}
+--- !u!114 &1012876196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1012876192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f5d995f8e76092488063cdd1dcb4bfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1012876197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1012876192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 360b27f2d40585146bef8e495908edfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  comboNumText: {fileID: 2010731487}
 --- !u!1 &1021253599
 GameObject:
   m_ObjectHideFlags: 0
@@ -2190,6 +2217,7 @@ RectTransform:
   - {fileID: 1029765107}
   - {fileID: 443213337}
   - {fileID: 818256869}
+  - {fileID: 2010731486}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2719,6 +2747,85 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2001519763}
   m_CullTransparentMesh: 1
+--- !u!1 &2010731485
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2010731486}
+  - component: {fileID: 2010731488}
+  - component: {fileID: 2010731487}
+  m_Layer: 5
+  m_Name: ComboNumText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2010731486
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010731485}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1309952369}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 432, y: -273}
+  m_SizeDelta: {x: 257.7664, y: 91.104}
+  m_Pivot: {x: 0, y: 1}
+--- !u!114 &2010731487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010731485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 42
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 4
+    m_MaxSize: 42
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: New Text
+--- !u!222 &2010731488
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010731485}
+  m_CullTransparentMesh: 1
 --- !u!1 &2105906604
 GameObject:
   m_ObjectHideFlags: 0
@@ -2763,15 +2870,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Meteorite: {fileID: 8244427958740683749, guid: 48de30ae7a2389945906ecfb352ba953, type: 3}
-  MeteortieFather: {fileID: 0}
+  MeteortieFather: {fileID: 2105906604}
   XspeedMin: 1
   XspeedMax: 2
   YspeedMin: 1
   YspeedMax: 2
-  cMode: 0
+  cMode: 1
   Area:
-  - vector1: {x: 1.09, y: -5}
-    vector2: {x: 0, y: 4.92}
+  - vector1: {x: 2.26, y: -5.09}
+    vector2: {x: 3.86, y: 4.85}
   - vector1: {x: -1.39, y: -5.26}
     vector2: {x: -0.19, y: 4.92}
   isCreating: 0
