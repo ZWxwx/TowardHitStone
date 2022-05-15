@@ -15,7 +15,12 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
     public GameObject MeteortieFather;
     [SerializeField]
     [Header("陨石速度")]
-    public float XspeedMin,XspeedMax,YspeedMin,YspeedMax;
+    public float XspeedMin;
+    public float XspeedMax,YspeedMin,YspeedMax;
+
+    [Header("陨石生成频率(1秒多少个，可小于1)")]
+    [SerializeField]
+    public float CreateQuency;
     public enum creatingMode//生成的模式
     { 
         empty,//默认无模式
@@ -35,7 +40,7 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
 
     Player p1, p2;
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         p1 = new Player(playerEnum.pL, Area[0]);
         p2 = new Player(playerEnum.pR, Area[1]);
@@ -67,13 +72,14 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
     [EditorButton]
     void Debug_Test()
     {
-        CreateMeteorite(p1);        
+        CreateMeteorite(p1);
+        CreateMeteorite(p2);
     }
     public GameObject CreateMeteorite(Player player)
     {
         float getX()
         {
-            return (player.Area.vector1.x - player.Area.vector2.x) / 2 - player.Area.vector1.x;
+            return (player.Area.vector1.x + player.Area.vector2.x) / 2;
         }
         GameObject met;
         Transform tr;
