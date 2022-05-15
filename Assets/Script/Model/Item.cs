@@ -13,7 +13,11 @@ public class Item
 	//预留参数
 	public int param;
 	//
+	//该事件主要针对使用物品后本身产生的效果，故有ItemType与PlayerType
+	public Action<ItemType,PlayerType> UseAction=ItemEventManager.Instance.OnItemUsed;
+	//该事件主要针对使用物品后产生的附带效果，如物品栏UI的更新
 	public Action OnUsed;
+
 	//
 	public string sprite;
 	//
@@ -35,6 +39,7 @@ public class Item
 		{
 			count--;
 			ItemEventManager.Instance.OnItemUsed(this.itemType, this.owner);
+			UseAction(itemType,owner);
 			OnUsed();
 			Debug.LogFormat("{0}使用了{1}", owner.ToString(), itemType.ToString());
 			return true;

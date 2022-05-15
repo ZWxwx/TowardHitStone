@@ -30,6 +30,17 @@ public class UIItem : MonoBehaviour
 		
 	}
 
+	public void UpdateInfo(ItemType type,PlayerType playerType)
+	{
+		if (item.count == 0)
+		{
+			itemPlane.UpdateInfo();
+			return;
+		}
+		this.numText.text = item.count.ToString();
+
+	}
+
 	public void OnDestroy()
 	{
 		item.OnUsed -= UpdateInfo;

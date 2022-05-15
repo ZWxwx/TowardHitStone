@@ -8,7 +8,7 @@ public class ItemEventManager : Singleton<ItemEventManager>
 	{
 		if (type == ItemType.Freezing)
 		{
-
+			Destroy(PlayerControllerManager.Instance.playerControllers[owner].gameObject);
 		}
 	}
 }
