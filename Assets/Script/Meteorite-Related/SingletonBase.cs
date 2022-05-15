@@ -5,7 +5,7 @@ using UnityEngine;
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
 
-    private static T _instance;
+    protected static T _instance;
     public static T Instance
     {
         get
@@ -21,7 +21,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             return _instance;
         }
     }
-    void Start()
+    protected virtual void Start()
     {
 
         if (_instance == null)

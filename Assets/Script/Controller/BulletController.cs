@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
+	public PlayerType playerType;
 	private BulletType currentBulletType;
 	public BulletType CurrentBulletType
 	{
@@ -32,7 +33,7 @@ public class BulletController : MonoBehaviour
 		touchObject(this,collision.gameObject);
 	}
 
-	public void touchObject(BulletController bulletController,GameObject collisionObj)
+	public void touchObject(BulletController bulletController, GameObject collisionObj)
 	{
 		BulletHitEventHandler.Instance.handleHitAction(bulletController, collisionObj);
 	}

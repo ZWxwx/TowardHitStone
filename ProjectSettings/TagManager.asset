@@ -6,6 +6,7 @@ TagManager:
   tags:
   - HeadPosition
   - Bullet
+  - Meteorite
   layers:
   - Default
   - TransparentFX
@@ -45,4 +46,7 @@ TagManager:
     locked: 0
   - name: SceneObject
     uniqueID: 3372376197
+    locked: 0
+  - name: UpperUI
+    uniqueID: 1721894593
     locked: 0

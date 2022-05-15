@@ -5,18 +5,15 @@ using UnityEngine.UI;
 
 public class ComboManager : Singleton<ComboManager>
 {
-	private int comboNum;
-	public  Text comboNumText;
-	public int ComboNum
+	public Dictionary<PlayerType, PlayerComboManager> playerComboManagers=new Dictionary<PlayerType, PlayerComboManager>();
+
+	protected override void Start()
 	{
-		get
+		if (_instance == null)
 		{
-			return comboNum;
+			DontDestroyOnLoad(gameObject);
 		}
-		set
-		{
-			comboNum = value;
-			comboNumText.text = comboNum.ToString();
-		}
+		playerComboManagers.Add(PlayerType.Player1, GetComponents<PlayerComboManager>()[0]);
+		playerComboManagers.Add(PlayerType.Player2, GetComponents<PlayerComboManager>()[1]);
 	}
 }
