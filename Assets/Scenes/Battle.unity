@@ -1434,18 +1434,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Meteorite: {fileID: 8244427958740683749, guid: 48de30ae7a2389945906ecfb352ba953, type: 3}
   MeteortieFather: {fileID: 0}
-  XspeedMin: 0.1
-  XspeedMax: 0.2
+  XspeedMin: 0.5
+  XspeedMax: 1
   YspeedMin: 0.1
   YspeedMax: 0.2
-  CreateQuency: 2
+  CreateQuency: 0.5
+  QuencyDevince: 0.2
   cMode: 1
   Area:
-  - vector1: {x: 0.22, y: -5.61}
-    vector2: {x: -0.6, y: 4.85}
-  - vector1: {x: 3.57, y: -5.74}
-    vector2: {x: 2.49, y: 4.92}
-  isCreating: 0
+  - vector1: {x: 0, y: -5}
+    vector2: {x: -0.5, y: 5}
+  - vector1: {x: 0, y: -5}
+    vector2: {x: 0.5, y: 5}
+  isCreating: 1
 --- !u!1 &538287568
 GameObject:
   m_ObjectHideFlags: 0

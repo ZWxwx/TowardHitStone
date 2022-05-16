@@ -18,9 +18,11 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
     public float XspeedMin;
     public float XspeedMax,YspeedMin,YspeedMax;
 
-    [Header("陨石生成频率(1秒多少个，可小于1)")]
+    [Header("陨石生成频率(多少秒生成一个) 可小于1")]
     [SerializeField]
     public float CreateQuency;
+    [Header("陨石生成频率的偏差值，单位为秒 等于0即没有偏差 会同时向左右偏差同一个值")]
+    public float QuencyDevince;
     public enum creatingMode//生成的模式
     { 
         empty,//默认无模式
@@ -29,9 +31,9 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         FullRandom,//两边完全随机
     }
     public creatingMode cMode;
-   [Header("生成范围有两个，每个玩家对应一个，在运行模式下可以在编辑器里看到具体的区域")]
+    [Header("生成范围有两个，每个玩家对应一个 在运行模式下可以在编辑器里看到具体的区域")]
     public Rectangle[] Area=new Rectangle[2];
-    public void CreateModeSet(creatingMode m)
+    public void CreateModeSet(creatingMode m) // 设置createMode的代码，只是起方便
     {
         cMode = m;
     }
@@ -39,7 +41,6 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
     public bool isCreating;//控制是否生成
 
     Player p1, p2;
-    // Start is called before the first frame update
     private void Awake()
     {
         p1 = new Player(playerEnum.pL, Area[0]);
@@ -54,6 +55,10 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
             f.drawArea();
         }
 
+        if(isCreating)
+        {
+            CreateInMode(cMode);
+        }
     }
 
 #if UNITY_EDITOR
@@ -69,11 +74,82 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
     }
 #endif
 
+    private void CreateInMode(creatingMode c)//理论上这串代码可以优化
+    {
+        
+        switch (c)
+        {
+            case creatingMode.FullSymmetry:
+                {
+                    if (p1.createRate <= 0)
+                    {
+                        CreateMeteorite();
+                        p1.createRate =  CreateQuency + QuencyDevince * Random.Range(-1f, 1f);
+                    }
+                    else 
+                    {
+                        p1.createRate -= Time.deltaTime;
+                    }
+                    break;
+                }
+            case creatingMode.NumSymmetry:
+                {
+                    if (p1.createRate <= 0)
+                    {
+                        CreateMeteorite(p1);
+                        CreateMeteorite(p2);
+                        p1.createRate = CreateQuency + QuencyDevince * Random.Range(-1f, 1f);
+                    }
+                    else
+                    {
+                        p1.createRate -= Time.deltaTime;
+                    }
+
+                    break;
+                }
+            case creatingMode.FullRandom:
+                {
+                    void CreateInline(Player p)//当成内联函数吧，别在意了
+                    {
+                        if (p.createRate <= 0)
+                        {
+                            CreateMeteorite(p);
+                            p.createRate = CreateQuency + QuencyDevince * Random.Range(-1f, 1f);
+                        }
+                        else
+                        {
+                            p.createRate -= Time.deltaTime;
+                        }
+                    }
+                    CreateInline(p1);
+                    CreateInline(p2);
+                    break;
+                }
+        }
+    }
+
+
     [EditorButton]
     void Debug_Test()
     {
-        CreateMeteorite(p1);
-        CreateMeteorite(p2);
+
+        switch (cMode)
+        {
+            case creatingMode.FullSymmetry:
+                {
+                    
+                    CreateMeteorite();
+                    break;
+                }
+            case creatingMode.NumSymmetry:
+            case creatingMode.FullRandom:
+                {
+                        CreateMeteorite(p1);
+                        CreateMeteorite(p2);
+                        break;
+                }
+               
+        }
     }
     public GameObject CreateMeteorite(Player player)
     {
@@ -97,8 +173,33 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         //Debug.Log(t);
         return met;
     }
+    public GameObject CreateMeteorite()//同时生成两边的陨石
+    {
+        float getX(Player p)
+        {
+            return (p.Area.vector1.x + p.Area.vector2.x) / 2;
+        }
+        GameObject met,met2;
+        Transform tr;
+        if (MeteortieFather == null) //如果父对象没有 则以系统本身为父对象
+        {
+            tr = transform;
+        }
+        else
+        {
+            tr = MeteortieFather.transform;
+        }
+        met = Instantiate(Meteorite, tr);//生成陨石对象
+        met2 = Instantiate(Meteorite, tr);//生成陨石对象
+        var t = RandomPosGenerateForY(p1.Area);
+        met.transform.position = new Vector3(getX(p1), t, 0);
+        met2.transform.position = new Vector3(getX(p2), t, 0);
+        giveSpeedAndDirection(met,met2);
+        //Debug.Log(t);
+        return met;
+    }
 
-    void giveSpeedAndDirection(GameObject met, Player player)//初始速度以及方向调整
+    private void giveSpeedAndDirection(GameObject met, Player player)//初始速度以及方向调整
     {
         Rigidbody2D Rb;
         //如果没有2D刚体组件 则创建一个 不过好像这里不太能实现
@@ -116,13 +217,31 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         Rb.velocity = new Vector2(Random.Range(XspeedMin,XspeedMax)*dir, Random.Range(YspeedMin, YspeedMax) * Ydir.y);
 
     }
-
+    private void giveSpeedAndDirection(GameObject met, GameObject met2)//同时双陨石时 初始速度以及方向调整
+    {
+        Rigidbody2D Rb;
+        //如果没有2D刚体组件 则创建一个 不过好像这里不太能实现
+        Rb = met.GetComponent<Rigidbody2D>() ?? met.AddComponent<Rigidbody2D>();
+        int dir = -1;
     
+
+        Vector2 Ydir = new Vector2((p1.Area.vector1.x + p1.Area.vector2.x) / 2 - met.transform.position.x,
+            (p1.Area.vector1.y + p1.Area.vector2.y) / 2 - met.transform.position.y);
+        float xspeed = Random.Range(XspeedMin, XspeedMax);
+        Rb.velocity = new Vector2(xspeed * dir, Random.Range(YspeedMin, YspeedMax) * Ydir.y);
+
+        Rb = met2.GetComponent<Rigidbody2D>() ?? met.AddComponent<Rigidbody2D>();
+        dir = -dir;
+        Rb.velocity = new Vector2(xspeed * dir, Random.Range(YspeedMin, YspeedMax) * Ydir.y);
+    }
+
+
+
     /// <summary>
     /// 以下为生成陨石位置的随机生成代码，需要优化请在此修改
     /// </summary>
     /// <returns></returns>
-    float RandomPosGenerateForY(Rectangle _Area)//因为目前本项目与X位置无关，暂时只随机Y轴
+    private float RandomPosGenerateForY(Rectangle _Area)//因为目前本项目与X位置无关，暂时只随机Y轴
     {
         ///
         //正态分布写到吐血 不用了
@@ -157,8 +276,10 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
     {
         public playerEnum tag;
         public Rectangle Area;//对应的生成区域
+        public float createRate, createMaxRate;//玩家陨石生成计时器
         public Player(playerEnum a,Rectangle b)
         {
+            createRate = 0f;
             tag = a;
             Area = b;
         }
