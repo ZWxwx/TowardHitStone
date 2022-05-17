@@ -2721,8 +2721,8 @@ MonoBehaviour:
   iComboTime: 0
   comboNumText: {fileID: 559462062}
   colorParam1: 10
-  originColor: {r: 1, g: 1, b: 1, a: 0}
-  endColor: {r: 0.993973, g: 1, b: 0, a: 0}
+  originColor: {r: 1, g: 1, b: 1, a: 1}
+  endColor: {r: 0.993973, g: 1, b: 0, a: 1}
 --- !u!114 &1469062641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2739,8 +2739,8 @@ MonoBehaviour:
   iComboTime: 0
   comboNumText: {fileID: 589140604}
   colorParam1: 10
-  originColor: {r: 1, g: 1, b: 1, a: 0}
-  endColor: {r: 1, g: 0, b: 0, a: 0}
+  originColor: {r: 1, g: 1, b: 1, a: 1}
+  endColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &1469062642
 MonoBehaviour:
   m_ObjectHideFlags: 0

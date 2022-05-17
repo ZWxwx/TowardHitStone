@@ -7,7 +7,7 @@ public class BulletHitEventHandler : Singleton<BulletHitEventHandler>
 {
 	public Action<BulletController, GameObject> hitAction;
 
-	public void Start()
+	public new void Start()
 	{
 		hitAction += this.handleHitAction;
 	}

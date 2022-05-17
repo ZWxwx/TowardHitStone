@@ -4,5 +4,7 @@ using UnityEngine;
 
 public enum EffectType
 {
-	
+	none=0,
+	freezing=1,
+	explode=2,
 }
