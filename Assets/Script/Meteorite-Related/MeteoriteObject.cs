@@ -4,10 +4,20 @@ using UnityEngine;
 
 public class MeteoriteObject : MonoBehaviour
 {
+    public playerEnum ForWhichPlayer;//记录属于哪个玩家的
+    
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (ForWhichPlayer == playerEnum.pL)
+        {
+            MeteoriteCreateSystem.Instance.MeteoriteList[MeteoriteCreateSystem.playerLeft].Add(gameObject);
+        }
+        else 
+        {
+            MeteoriteCreateSystem.Instance.MeteoriteList[MeteoriteCreateSystem.playerRight].Add(gameObject);
+        }
     }
 
     // Update is called once per frame
@@ -17,6 +27,7 @@ public class MeteoriteObject : MonoBehaviour
     }
     private void OnBecameInvisible()
     {
+        RemoveFromList();
         Destroy(gameObject);
     }
 
@@ -26,9 +37,18 @@ public class MeteoriteObject : MonoBehaviour
     }
     public void destoryMet()//在这里执行 正确的销毁指令
     {
-
-
-
+        RemoveFromList();
         Destroy(gameObject);
+    }
+    void RemoveFromList()
+    {
+        if (ForWhichPlayer == playerEnum.pL)
+        {
+            MeteoriteCreateSystem.Instance.MeteoriteList[MeteoriteCreateSystem.playerLeft].Remove(gameObject);
+        }
+        else
+        {
+            MeteoriteCreateSystem.Instance.MeteoriteList[MeteoriteCreateSystem.playerRight].Remove(gameObject);
+        }
     }
 }

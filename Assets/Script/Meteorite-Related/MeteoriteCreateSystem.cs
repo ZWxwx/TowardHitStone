@@ -2,21 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public enum playerEnum //全局枚举 用来判断为那个玩家生成的内容
 { 
     pL=0,
     pR=1
 }
+
 public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
 {
+
+    public List<GameObject> MeteoriteListLeft, MeteoriteListRight;
+
+
+
+    public List<GameObject>[] MeteoriteList = new List<GameObject>[2];
+    public const int playerLeft = 0, playerRight = 1;
     [Header("陨石的物体")]
     public GameObject Meteorite;//陨石
     [Header("陨石父对象")]
-    public GameObject MeteortieFather;
+    public GameObject MeteoriteFather;
     [SerializeField]
     [Header("陨石速度")]
     public float XspeedMin;
     public float XspeedMax,YspeedMin,YspeedMax;
+
+    [Header("陨石总体大小")]
+    public float MeteoriteSizeGeneral;
+    [Header("陨石大小随机偏差值")]
+    public float MeteoriteSizeDevince;
+
 
     [Header("陨石生成频率(多少秒生成一个) 可小于1")]
     [SerializeField]
@@ -43,8 +58,13 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
     Player p1, p2;
     private void Awake()
     {
-        p1 = new Player(playerEnum.pL, Area[0]);
-        p2 = new Player(playerEnum.pR, Area[1]);
+        p1 = new Player(playerEnum.pL, Area[0],playerLeft);
+        p2 = new Player(playerEnum.pR, Area[1],playerRight);
+        MeteoriteList[0] = new List<GameObject>();
+        MeteoriteList[1] = new List<GameObject>();
+        MeteoriteListLeft = MeteoriteList[playerLeft];
+        MeteoriteListRight = MeteoriteList[playerRight];
+
     }
 
     // Update is called once per frame
@@ -130,7 +150,7 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
 
 
     [EditorButton]
-    void Debug_Test()
+    void Debug_CreateOne()
     {
 
         switch (cMode)
@@ -151,7 +171,7 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
                
         }
     }
-    public GameObject CreateMeteorite(Player player)
+    public GameObject CreateMeteorite(Player player) //只生成一边的陨石
     {
         float getX()
         {
@@ -159,20 +179,23 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         }
         GameObject met;
         Transform tr;
-        if (MeteortieFather == null) //如果父对象没有 则以系统本身为父对象
+        if (MeteoriteFather == null) //如果父对象没有 则以系统本身为父对象
         {
             tr = transform;
         }
         else {
-            tr = MeteortieFather.transform;
+            tr = MeteoriteFather.transform;
         }
         met = Instantiate(Meteorite,tr);//生成陨石对象
         var t = RandomPosGenerateForY(player.Area);
         met.transform.position=new Vector3(getX(),t,0);
         giveSpeedAndDirection(met,player);
+        setMeteroiteSize(met);
         //Debug.Log(t);
+        setMeteoritePlayer(met, player);
         return met;
     }
+
     public GameObject CreateMeteorite()//同时生成两边的陨石
     {
         float getX(Player p)
@@ -181,13 +204,13 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         }
         GameObject met,met2;
         Transform tr;
-        if (MeteortieFather == null) //如果父对象没有 则以系统本身为父对象
+        if (MeteoriteFather == null) //如果父对象没有 则以系统本身为父对象
         {
             tr = transform;
         }
         else
         {
-            tr = MeteortieFather.transform;
+            tr = MeteoriteFather.transform;
         }
         met = Instantiate(Meteorite, tr);//生成陨石对象
         met2 = Instantiate(Meteorite, tr);//生成陨石对象
@@ -195,8 +218,16 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         met.transform.position = new Vector3(getX(p1), t, 0);
         met2.transform.position = new Vector3(getX(p2), t, 0);
         giveSpeedAndDirection(met,met2);
+        setMeteoritePlayer(met, p1);
+        setMeteoritePlayer(met2, p2);
+        setMeteroiteSize(met);
+        setMeteroiteSize(met2);
         //Debug.Log(t);
         return met;
+    }
+    void setMeteoritePlayer(GameObject met, Player p) //定义陨石为哪方玩家生成
+    {
+        met.GetComponent<MeteoriteObject>().ForWhichPlayer = p.tag;
     }
 
     private void giveSpeedAndDirection(GameObject met, Player player)//初始速度以及方向调整
@@ -235,7 +266,16 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         Rb.velocity = new Vector2(xspeed * dir, Random.Range(YspeedMin, YspeedMax) * Ydir.y);
     }
 
-
+    private void setMeteroiteSize(GameObject met,float size=0) //设置陨石大小
+    {
+        if(size==0)
+        {
+            size = MeteoriteSizeGeneral+Random.Range(-MeteoriteSizeDevince,MeteoriteSizeDevince);
+        }
+        if(size<=0)
+        { size = 0.01f; }
+        met.transform.localScale = new Vector3(size, size, 0);
+    }
 
     /// <summary>
     /// 以下为生成陨石位置的随机生成代码，需要优化请在此修改
@@ -272,16 +312,18 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
 
 
     }
-   public class Player//玩家类
+    public class Player//玩家类
     {
         public playerEnum tag;
         public Rectangle Area;//对应的生成区域
+        public int ListTag;
         public float createRate, createMaxRate;//玩家陨石生成计时器
-        public Player(playerEnum a,Rectangle b)
+        public Player(playerEnum a,Rectangle b,int c)
         {
             createRate = 0f;
             tag = a;
             Area = b;
+            ListTag = c;
         }
     }
 }

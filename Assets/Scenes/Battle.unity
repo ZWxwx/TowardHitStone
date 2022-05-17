@@ -1433,14 +1433,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Meteorite: {fileID: 8244427958740683749, guid: 48de30ae7a2389945906ecfb352ba953, type: 3}
-  MeteortieFather: {fileID: 0}
+  MeteoriteFather: {fileID: 0}
   XspeedMin: 0.5
   XspeedMax: 1
   YspeedMin: 0.1
   YspeedMax: 0.2
+  MeteoriteSizeGeneral: 1
+  MeteoriteSizeDevince: 0.1
   CreateQuency: 0.5
   QuencyDevince: 0.2
-  cMode: 1
+  cMode: 3
   Area:
   - vector1: {x: 0, y: -5}
     vector2: {x: -0.5, y: 5}
