@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum playerEnum //全局枚举 用来判断为那个玩家生成的内容
-{ 
-    pL=0,
-    pR=1
-}
+//public enum playerEnum //全局枚举 用来判断为那个玩家生成的内容
+//{ 
+//    pL=0,
+//    pR=1
+//}
 
 public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
 {
-
+    public System.Action<MeteoriteObject> addNewMeteorite;
     public List<GameObject> MeteoriteListLeft, MeteoriteListRight;
 
 
@@ -56,10 +56,15 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
     public bool isCreating;//控制是否生成
 
     Player p1, p2;
+
+    public void emptyFunc(MeteoriteObject met)
+	{
+        ;
+	}
     private void Awake()
     {
-        p1 = new Player(playerEnum.pL, Area[0],playerLeft);
-        p2 = new Player(playerEnum.pR, Area[1],playerRight);
+        p1 = new Player(PlayerType.Player1, Area[0],playerLeft);
+        p2 = new Player(PlayerType.Player2, Area[1],playerRight);
         MeteoriteList[0] = new List<GameObject>();
         MeteoriteList[1] = new List<GameObject>();
         MeteoriteListLeft = MeteoriteList[playerLeft];
@@ -193,6 +198,11 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         setMeteroiteSize(met);
         //Debug.Log(t);
         setMeteoritePlayer(met, player);
+		if (addNewMeteorite != null)
+		{
+            addNewMeteorite(met.GetComponent<MeteoriteObject>());
+        }
+        
         return met;
     }
 
@@ -238,8 +248,8 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         int dir=0;
         switch (player.tag)
         {
-            case playerEnum.pL: dir = -1; break;
-            case playerEnum.pR: dir = 1; break;
+            case PlayerType.Player1: dir = -1; break;
+            case PlayerType.Player2: dir = 1; break;
         }
 
         Vector2 Ydir = new Vector2((player.Area.vector1.x + player.Area.vector2.x) / 2 - met.transform.position.x,
@@ -314,11 +324,11 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
     }
     public class Player//玩家类
     {
-        public playerEnum tag;
+        public PlayerType tag;
         public Rectangle Area;//对应的生成区域
         public int ListTag;
         public float createRate, createMaxRate;//玩家陨石生成计时器
-        public Player(playerEnum a,Rectangle b,int c)
+        public Player(PlayerType a,Rectangle b,int c)
         {
             createRate = 0f;
             tag = a;

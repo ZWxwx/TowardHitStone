@@ -8,7 +8,10 @@ public class ItemEventManager : Singleton<ItemEventManager>
 	{
 		if (type == ItemType.Freezing)
 		{
-			Destroy(PlayerControllerManager.Instance.playerControllers[owner].gameObject);
+			//Destroy(PlayerControllerManager.Instance.playerControllers[owner].gameObject);
+			PlayerAllMetFreezing freezeEffect=gameObject.AddComponent<PlayerAllMetFreezing>();
+			freezeEffect.playerType = owner;
+			freezeEffect.time = 4f;
 		}
 	}
 }

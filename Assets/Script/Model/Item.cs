@@ -38,7 +38,7 @@ public class Item
 		if (count > 0)
 		{
 			count--;
-			ItemEventManager.Instance.OnItemUsed(this.itemType, this.owner);
+			//ItemEventManager.Instance.OnItemUsed(this.itemType, this.owner);
 			UseAction(itemType,owner);
 			OnUsed();
 			Debug.LogFormat("{0}สนำรมห{1}", owner.ToString(), itemType.ToString());

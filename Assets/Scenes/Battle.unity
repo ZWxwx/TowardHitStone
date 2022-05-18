@@ -1432,12 +1432,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6cd1d6a1d1b5e248a9f6004fb00e301, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MeteoriteListLeft: []
+  MeteoriteListRight: []
   Meteorite: {fileID: 8244427958740683749, guid: 48de30ae7a2389945906ecfb352ba953, type: 3}
   MeteoriteFather: {fileID: 0}
-  XspeedMin: 0.5
-  XspeedMax: 1
-  YspeedMin: 0.1
-  YspeedMax: 0.2
+  XspeedMin: 2
+  XspeedMax: 8
+  YspeedMin: 0.5
+  YspeedMax: 1
   MeteoriteSizeGeneral: 1
   MeteoriteSizeDevince: 0.1
   CreateQuency: 0.5

@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class MeteoriteObject : MonoBehaviour
 {
-    public playerEnum ForWhichPlayer;//记录属于哪个玩家的
+    public PlayerType ForWhichPlayer;//记录属于哪个玩家的
     
 
     // Start is called before the first frame update
     void Start()
     {
-        if (ForWhichPlayer == playerEnum.pL)
+        if (ForWhichPlayer == PlayerType.Player1)
         {
             MeteoriteCreateSystem.Instance.MeteoriteList[MeteoriteCreateSystem.playerLeft].Add(gameObject);
         }
@@ -42,7 +42,7 @@ public class MeteoriteObject : MonoBehaviour
     }
     void RemoveFromList()
     {
-        if (ForWhichPlayer == playerEnum.pL)
+        if (ForWhichPlayer == PlayerType.Player1)
         {
             MeteoriteCreateSystem.Instance.MeteoriteList[MeteoriteCreateSystem.playerLeft].Remove(gameObject);
         }

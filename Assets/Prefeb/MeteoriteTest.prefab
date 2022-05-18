@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -1361573471068931932}
   - component: {fileID: 4620319964804962831}
   - component: {fileID: 2217457469667018640}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: MeteoriteTest
   m_TagString: Meteorite
   m_Icon: {fileID: 0}
@@ -118,6 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df19db03057f7dc4492c1981e566b5e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ForWhichPlayer: 0
 --- !u!61 &2217457469667018640
 BoxCollider2D:
   m_ObjectHideFlags: 0
