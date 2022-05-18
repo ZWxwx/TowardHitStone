@@ -6,12 +6,29 @@ public class ItemEventManager : Singleton<ItemEventManager>
 {
 	public void OnItemUsed(ItemType type,PlayerType owner)
 	{
-		if (type == ItemType.Freezing)
+		switch (type)
 		{
-			//Destroy(PlayerControllerManager.Instance.playerControllers[owner].gameObject);
-			PlayerAllMetFreezing freezeEffect=gameObject.AddComponent<PlayerAllMetFreezing>();
-			freezeEffect.playerType = owner;
-			freezeEffect.time = 4f;
+			case ItemType.None:
+				break;
+			case ItemType.Explodable_nextBomb:
+				PlayerNextBomb nextBombEffect = gameObject.AddComponent<PlayerNextBomb>();
+				nextBombEffect.playerType = owner;
+
+				break;
+			case ItemType.Freezing:
+				//Destroy(PlayerControllerManager.Instance.playerControllers[owner].gameObject);
+				PlayerAllMetFreezing freezeEffect = gameObject.AddComponent<PlayerAllMetFreezing>();
+				freezeEffect.playerType = owner;
+				freezeEffect.time = 4f;
+				break;
+			case ItemType.Interfere:
+				break;
+			case ItemType.Tracking:
+				break;
+			case ItemType.WhiteHole:
+				break;
+			default:
+				break;
 		}
 	}
 }

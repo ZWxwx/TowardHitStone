@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public Action onShot;
+    public Action<BulletController> onShotBullet;
 
     //Íæ¼Ò
     public PlayerType playerType = PlayerType.Player1;
@@ -76,6 +77,10 @@ public class PlayerController : MonoBehaviour
         GameObject tmp=Instantiate(bulletObjectPrefab,gunTubeObject.transform.position, Quaternion.Euler(0,0,Angle), worldObject.transform);
         tmp.GetComponent<Rigidbody2D>().velocity = shotVector * speed;
         tmp.GetComponent<BulletController>().playerType = this.playerType;
+		if (onShotBullet!=null)
+		{
+            onShotBullet(tmp.GetComponent<BulletController>());
+        }
     }
 }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class SceneTool:MonoBehaviour
 {
-	public static void GoToScene(int index)
+	public void GoToScene(int index)
 	{
 		SceneManager.LoadScene(index);
 	}
