@@ -15,10 +15,12 @@ public class BulletHitEventHandler : Singleton<BulletHitEventHandler>
 	{
 		if (target.tag == "Meteorite")
 		{
-			Destroy(target);
-			ComboManager.Instance.playerComboManagers[bullet.playerType].ComboNum += 1;
-			ComboManager.Instance.playerComboManagers[bullet.playerType].instantiateComboText(target.transform, new Vector3(0, 1, 0));
-			MeteoriteCreateSystem.Instance.moveArea(bullet.playerType);//÷¥––≥Ê∂¥“∆∂Ø÷∏¡Ó
+			target.GetComponent<MeteoriteObject>().healthBar.CurrentHealth -= 40;
+			Destroy(bullet.gameObject);
+			//Destroy(target);
+			//ComboManager.Instance.playerComboManagers[bullet.playerType].ComboNum += 1;
+			//ComboManager.Instance.playerComboManagers[bullet.playerType].instantiateComboText(target.transform, new Vector3(0, 1, 0));
+			//MeteoriteCreateSystem.Instance.moveArea(bullet.playerType);//÷¥––≥Ê∂¥“∆∂Ø÷∏¡Ó
 		}
 	}
 }

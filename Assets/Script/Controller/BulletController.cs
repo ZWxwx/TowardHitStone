@@ -35,7 +35,7 @@ public class BulletController : MonoBehaviour
 
 	public void touchObject(BulletController bulletController, GameObject collisionObj)
 	{
-		BulletHitEventHandler.Instance.handleHitAction(bulletController, collisionObj);
+		BulletHitEventHandler.Instance.hitAction(bulletController, collisionObj);
 	}
 
 	public void OnDestroy()

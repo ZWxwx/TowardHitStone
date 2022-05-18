@@ -1453,6 +1453,7 @@ MonoBehaviour:
   - vector1: {x: 0, y: -5}
     vector2: {x: 0.5, y: 5}
   isCreating: 1
+  moveareasSizePerHealth: 0.2
 --- !u!1 &538287568
 GameObject:
   m_ObjectHideFlags: 0
@@ -2878,7 +2879,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1548863968}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d42a8a7dface0484f81013e59f96c9c2, type: 3}
+  m_Script: {fileID: 11500000, guid: 10ee19f7af87f1d42a0aaf8852ccdfca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1555849052

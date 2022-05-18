@@ -33,7 +33,7 @@ public class PlayerAllMetFreezing : TimeLimitedEffectStatus
 
 	void AddFreeze(MeteoriteObject obj)
 	{
-		if (obj.ForWhichPlayer == playerType)
+		if (obj.ForWhichPlayer == playerType&&this!=null)
 		{
 			Freeze(obj);
 		}

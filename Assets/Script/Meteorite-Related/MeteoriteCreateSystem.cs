@@ -61,6 +61,10 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
 
     Player p1, p2;
 
+    [Header("白洞移动距离和陨石血量之比")]
+    public float moveareasSizePerHealth;
+    //
+
     public void emptyFunc(MeteoriteObject met)
 	{
         ;
@@ -333,17 +337,17 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         p2.Area = newAreaRight;
     } //预留的 似乎没啥用....
     private WornHole WormHoleObj;
-    public void moveArea(PlayerType playerTag) //让两个区域一起移动x距离
+    public void moveArea(PlayerType playerTag,float value) //让两个区域一起移动x距离
     {
 
         float xMove=0;
         if (playerTag == PlayerType.Player1)
         {
-            xMove = 1;
+            xMove = value*moveareasSizePerHealth;
         }
         else if(playerTag == PlayerType.Player2)
         {
-            xMove = -1;
+            xMove = -1* value * moveareasSizePerHealth;
         }
         xMove *= WornHoleMoveSpeed;
         p1.Area.vector1.x += xMove;
