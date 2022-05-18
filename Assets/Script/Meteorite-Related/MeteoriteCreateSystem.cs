@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-//public enum playerEnum //全局枚举 用来判断为那个玩家生成的内容
+//public enum playerEnum //全局枚举 用来判断为那个玩家生成的内容    ///
+//
+//使用PlayerTap进行替代
+//
 //{ 
 //    pL=0,
 //    pR=1
@@ -14,7 +17,8 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
     public System.Action<MeteoriteObject> addNewMeteorite;
     public List<GameObject> MeteoriteListLeft, MeteoriteListRight;
 
-
+    [Header("击中陨石之后 让陨石移动的距离")]
+    public float WornHoleMoveSpeed;
 
     public List<GameObject>[] MeteoriteList = new List<GameObject>[2];
     public const int playerLeft = 0, playerRight = 1;
@@ -69,7 +73,7 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         MeteoriteList[1] = new List<GameObject>();
         MeteoriteListLeft = MeteoriteList[playerLeft];
         MeteoriteListRight = MeteoriteList[playerRight];
-
+        WormHoleObj = GameObject.Find("WormHole").GetComponent<WornHole>();
     }
 
     // Update is called once per frame
@@ -322,6 +326,34 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
 
 
     }
+    
+    public void setArea(Rectangle newAreaLeft,Rectangle newAreaRight)
+    {
+        p1.Area = newAreaLeft;
+        p2.Area = newAreaRight;
+    } //预留的 似乎没啥用....
+    private WornHole WormHoleObj;
+    public void moveArea(PlayerType playerTag) //让两个区域一起移动x距离
+    {
+
+        float xMove=0;
+        if (playerTag == PlayerType.Player1)
+        {
+            xMove = 1;
+        }
+        else if(playerTag == PlayerType.Player2)
+        {
+            xMove = -1;
+        }
+        xMove *= WornHoleMoveSpeed;
+        p1.Area.vector1.x += xMove;
+        p1.Area.vector2.x += xMove;
+        p2.Area.vector1.x += xMove;
+        p2.Area.vector2.x += xMove;
+        WormHoleObj.move(xMove);
+    }
+
+
     public class Player//玩家类
     {
         public PlayerType tag;

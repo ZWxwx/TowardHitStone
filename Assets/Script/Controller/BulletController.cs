@@ -41,4 +41,9 @@ public class BulletController : MonoBehaviour
 	public void OnDestroy()
 	{
 	}
+    public void OnBecameInvisible() //DemonLord-添加
+		//让子弹在脱离场景时消失
+    {
+		Destroy(gameObject);
+    }
 }
