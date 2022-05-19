@@ -6,6 +6,7 @@ using UnityEngine;
 public class BulletController : MonoBehaviour
 {
 	public PlayerType playerType;
+	public float speed;
 	private BulletType currentBulletType;
 	public BulletType CurrentBulletType
 	{

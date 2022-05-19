@@ -76,6 +76,7 @@ public class PlayerController : MonoBehaviour
     {
         GameObject tmp=Instantiate(bulletObjectPrefab,gunTubeObject.transform.position, Quaternion.Euler(0,0,Angle), worldObject.transform);
         tmp.GetComponent<Rigidbody2D>().velocity = shotVector * speed;
+        tmp.GetComponent<BulletController>().speed = speed ;
         tmp.GetComponent<BulletController>().playerType = this.playerType;
 		if (onShotBullet!=null)
 		{
