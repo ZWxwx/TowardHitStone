@@ -14,14 +14,19 @@ using UnityEngine;
 
 public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
 {
+    #region 变量
+    ItemCreate itemCreateSystem;
+
     public System.Action<MeteoriteObject> addNewMeteorite;
+
     public List<GameObject> MeteoriteListLeft, MeteoriteListRight;
-
-    [Header("击中陨石之后 让陨石移动的距离")]
-    public float WornHoleMoveSpeed;
-
     public List<GameObject>[] MeteoriteList = new List<GameObject>[2];
     public const int playerLeft = 0, playerRight = 1;
+
+    [Header("击中陨石之后 让虫洞移动的距离倍数")]
+    public float WornHoleMoveSpeed;
+
+
     [Header("陨石的物体")]
     public GameObject Meteorite;//陨石
     [Header("陨石父对象")]
@@ -36,6 +41,10 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
     [Header("陨石大小随机偏差值")]
     public float MeteoriteSizeDevince;
 
+    [HideInInspector]
+    public float targetWornHoleX; //预计的虫洞x坐标
+    //[HideInInspector]
+    //public bool isTargetWornHoleXChanged;//检测虫洞预计坐标有无改变
 
     [Header("陨石生成频率(多少秒生成一个) 可小于1")]
     [SerializeField]
@@ -44,9 +53,13 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
     public float QuencyDevince;
     public enum creatingMode//生成的模式
     { 
+        [InspectorName("默认无模式")]
         empty,//默认无模式
+        [InspectorName("完全对称模式")]
         FullSymmetry,//完全对称模式
+        [InspectorName("数量对称模式")]
         NumSymmetry,//数量对称模式
+        [InspectorName("两边完全随机")]
         FullRandom,//两边完全随机
     }
     public creatingMode cMode;
@@ -58,17 +71,22 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
     }
     [Header("是否开始生成")]
     public bool isCreating;//控制是否生成
+    [HideInInspector]
+    public Player p1, p2;
 
-    Player p1, p2;
-
-    [Header("白洞移动距离和陨石血量之比")]
+    [Header("虫洞移动距离和陨石血量之比")]
     public float moveareasSizePerHealth;
+    [Header("是否开启虫洞延时移动")]
+    public bool isLatencyMoveWornHole;
+    [Header("虫洞延时时间 单位 秒")]
+    public float WornHoleLatencyTime;
+
     //
 
     [Header("击毁陨石的基准分数，以scale为1为基准")]
     public float baseScore;
     //[Header("陨石分数和陨石血量之比")]
-
+    #endregion
     public void emptyFunc(MeteoriteObject met)
 	{
         ;
@@ -82,6 +100,8 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         MeteoriteListLeft = MeteoriteList[playerLeft];
         MeteoriteListRight = MeteoriteList[playerRight];
         WormHoleObj = GameObject.Find("WormHole").GetComponent<WornHole>();
+        targetWornHoleX = WormHoleObj.transform.position.x;
+        itemCreateSystem = gameObject.GetComponent<ItemCreate>();
     }
 
     // Update is called once per frame
@@ -96,6 +116,11 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         {
             CreateInMode(cMode);
         }
+        
+    }
+    private void FixedUpdate()
+    {
+        lateMoveWornHole();
     }
 
 #if UNITY_EDITOR
@@ -110,7 +135,7 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         //UnityEditor.Handles.ArrowHandleCap(0, this.transform.position, this.transform.rotation, 1f, EventType.Repaint);
     }
 #endif
-
+    #region 陨石生成相关
     private void CreateInMode(creatingMode c)//理论上这串代码可以优化
     {
         
@@ -244,7 +269,9 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         setMeteoritePlayer(met, p1);
         setMeteoritePlayer(met2, p2);
         setMeteroiteSize(met);
-        setMeteroiteSize(met2);
+        met2.transform.localScale = met.transform.localScale;
+        setMeteoriteScore(met.GetComponent<MeteoriteObject>());
+        setMeteoriteScore(met2.GetComponent<MeteoriteObject>());
         //Debug.Log(t);
         return met;
     }
@@ -252,7 +279,6 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
     {
         met.GetComponent<MeteoriteObject>().ForWhichPlayer = p.tag;
     }
-
     void setMeteoriteScore(MeteoriteObject meteorite)
 	{
         meteorite.score=baseScore*meteorite.transform.localScale.x;
@@ -286,12 +312,12 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
 
         Vector2 Ydir = new Vector2((p1.Area.vector1.x + p1.Area.vector2.x) / 2 - met.transform.position.x,
             (p1.Area.vector1.y + p1.Area.vector2.y) / 2 - met.transform.position.y);
-        float xspeed = Random.Range(XspeedMin, XspeedMax);
-        Rb.velocity = new Vector2(xspeed * dir, Random.Range(YspeedMin, YspeedMax) * Ydir.y);
+        float xspeed = Random.Range(XspeedMin, XspeedMax),yspeed= Random.Range(YspeedMin, YspeedMax);
+        Rb.velocity = new Vector2(xspeed * dir, yspeed * Ydir.y);
 
         Rb = met2.GetComponent<Rigidbody2D>() ?? met.AddComponent<Rigidbody2D>();
         dir = -dir;
-        Rb.velocity = new Vector2(xspeed * dir, Random.Range(YspeedMin, YspeedMax) * Ydir.y);
+        Rb.velocity = new Vector2(xspeed * dir, yspeed * Ydir.y);
     }
 
     private void setMeteroiteSize(GameObject met,float size=0) //设置陨石大小
@@ -340,33 +366,120 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
 
 
     }
-    
+    #endregion
     public void setArea(Rectangle newAreaLeft,Rectangle newAreaRight)
     {
         p1.Area = newAreaLeft;
         p2.Area = newAreaRight;
     } //预留的 似乎没啥用....
     private WornHole WormHoleObj;
-    public void moveArea(PlayerType playerTag,float value) //让两个区域一起移动x距离
+    public void moveArea(PlayerType playerTag, float value) //让两个区域一起移动x距离
     {
-
-        float xMove=0;
-        if (playerTag == PlayerType.Player1)
+            float xMove = 0;
+            if (playerTag == PlayerType.Player1)
+            {
+                xMove = value * moveareasSizePerHealth;
+            }
+            else if (playerTag == PlayerType.Player2)
+            {
+                xMove = -1 * value * moveareasSizePerHealth;
+            }
+            xMove *= WornHoleMoveSpeed;
+        if (!isLatencyMoveWornHole)
         {
-            xMove = value*moveareasSizePerHealth;
+            p1.Area.vector1.x += xMove;
+            p1.Area.vector2.x += xMove;
+            p2.Area.vector1.x += xMove;
+            p2.Area.vector2.x += xMove;
+            WormHoleObj.move(xMove);
         }
-        else if(playerTag == PlayerType.Player2)
+        else 
         {
-            xMove = -1* value * moveareasSizePerHealth;
+            targetWornHoleX += xMove;
+            //Debug.Log("xMove="+xMove);
+            WornHoleLateMoveSpeed = ReGetWornHoleSpeed();
+            WornHoleLateMoveTime = WornHoleLatencyTime;
+            //Debug.Log("开始移动" + targetWornHoleX);
         }
-        xMove *= WornHoleMoveSpeed;
-        p1.Area.vector1.x += xMove;
-        p1.Area.vector2.x += xMove;
-        p2.Area.vector1.x += xMove;
-        p2.Area.vector2.x += xMove;
-        WormHoleObj.move(xMove);
+    }
+    private float WornHoleLateMoveSpeed=0, WornHoleLateMoveTime=0;
+    private float ReGetWornHoleSpeed()
+    {
+        float speed;
+        speed = ((targetWornHoleX-WormHoleObj.transform.position.x) / WornHoleLatencyTime * Time.fixedDeltaTime);
+        //Debug.Log(WormHoleObj.transform.position.x+"-"+targetWornHoleX+"="+(targetWornHoleX - WormHoleObj.transform.position.x));
+        //Debug.Log((WormHoleObj.transform.position.x - targetWornHoleX)+"/"+ WornHoleLatencyTime+"="+(WormHoleObj.transform.position.x - targetWornHoleX) / WornHoleLatencyTime);
+        return speed;
+    }
+    private void lateMoveWornHole()
+    {
+        if (isLatencyMoveWornHole)
+        {
+            if (WornHoleLateMoveTime > 0)
+            {
+               // Debug.Log(WornHoleLateMoveTime);
+                p1.Area.vector1.x += WornHoleLateMoveSpeed;
+                p1.Area.vector2.x += WornHoleLateMoveSpeed;
+                p2.Area.vector1.x += WornHoleLateMoveSpeed;
+                p2.Area.vector2.x += WornHoleLateMoveSpeed;
+                WormHoleObj.move(WornHoleLateMoveSpeed);
+                WornHoleLateMoveTime -= Time.deltaTime;
+                if (Mathf.Abs((targetWornHoleX - WormHoleObj.transform.position.x)) < 0.005f)
+                {
+                    WornHoleLateMoveTime = 0;
+                    p1.Area.vector1.x = targetWornHoleX;
+                    p1.Area.vector2.x = targetWornHoleX;
+                    p2.Area.vector1.x = targetWornHoleX;
+                    p2.Area.vector2.x = targetWornHoleX;
+                    WormHoleObj.transform.position=new Vector3(targetWornHoleX, WormHoleObj.transform.position.y, WormHoleObj.transform.position.z);
+                    //Debug.Log("距离达到而停止");
+                }
+            }
+          
+        }
+    }
+    [EditorButton]
+    public void Debug_wornHoleMove()
+    {
+        moveArea(PlayerType.Player1,1000f);
     }
 
+    /// <summary>
+    /// 提供给物品生成的脚本
+    /// </summary>
+    /// <param name="player">玩家</param>
+    /// <returns></returns>
+    public GameObject CreateItem(Player player,GameObject itemPrefeb) //直接为生成道具那边的脚本铺路了 
+    {
+        float getX()
+        {
+            return (player.Area.vector1.x + player.Area.vector2.x) / 2;
+        }
+        GameObject item;
+        Transform tr;
+        if (itemCreateSystem.ItemFather == null) //如果父对象没有 则以系统本身为父对象
+        {
+            tr = transform;
+        }
+        else
+        {
+            tr = itemCreateSystem.ItemFather.transform;
+        }
+        item = Instantiate(itemPrefeb, tr.position, Quaternion.Euler(0, 0, Random.Range(0, 360)), tr);//生成物品对象
+        var t = RandomPosGenerateForY(player.Area);
+        item.transform.position = new Vector3(getX(), t, 0);
+        giveSpeedAndDirection(item, player);
+        //setMeteroiteSize(item);
+        //setMeteoriteScore(met.GetComponent<MeteoriteObject>());
+        //Debug.Log(t);
+        //setMeteoritePlayer(item, player);
+        //ifa (addNewMeteorite != null)
+        //{
+        //    addNewMeteorite(item.GetComponent<MeteoriteObject>());
+        //}
+
+        return item;
+    }
 
     public class Player//玩家类
     {
@@ -374,9 +487,11 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         public Rectangle Area;//对应的生成区域
         public int ListTag;
         public float createRate, createMaxRate;//玩家陨石生成计时器
+        public float itemCreateRate;
         public Player(PlayerType a,Rectangle b,int c)
         {
             createRate = 0f;
+            itemCreateRate = 0f;
             tag = a;
             Area = b;
             ListTag = c;
