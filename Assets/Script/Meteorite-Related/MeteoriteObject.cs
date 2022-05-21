@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MeteoriteObject : MonoBehaviour
 {
+    public float score;
     public PlayerType ForWhichPlayer;//记录属于哪个玩家的
     public MeteoriteHealthBarController healthBar;
     

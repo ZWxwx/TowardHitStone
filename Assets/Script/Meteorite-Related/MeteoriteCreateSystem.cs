@@ -65,6 +65,10 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
     public float moveareasSizePerHealth;
     //
 
+    [Header("击毁陨石的基准分数，以scale为1为基准")]
+    public float baseScore;
+    //[Header("陨石分数和陨石血量之比")]
+
     public void emptyFunc(MeteoriteObject met)
 	{
         ;
@@ -199,11 +203,12 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         else {
             tr = MeteoriteFather.transform;
         }
-        met = Instantiate(Meteorite,tr);//生成陨石对象
+        met = Instantiate(Meteorite, tr.position, Quaternion.Euler(0, 0, Random.Range(0, 360)), tr);//生成陨石对象
         var t = RandomPosGenerateForY(player.Area);
         met.transform.position=new Vector3(getX(),t,0);
         giveSpeedAndDirection(met,player);
         setMeteroiteSize(met);
+        setMeteoriteScore(met.GetComponent<MeteoriteObject>());
         //Debug.Log(t);
         setMeteoritePlayer(met, player);
 		if (addNewMeteorite != null)
@@ -231,7 +236,7 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
             tr = MeteoriteFather.transform;
         }
         met = Instantiate(Meteorite, tr);//生成陨石对象
-        met2 = Instantiate(Meteorite, tr);//生成陨石对象
+        met2 = Instantiate(Meteorite,  tr);//生成陨石对象  
         var t = RandomPosGenerateForY(p1.Area);
         met.transform.position = new Vector3(getX(p1), t, 0);
         met2.transform.position = new Vector3(getX(p2), t, 0);
@@ -247,6 +252,11 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
     {
         met.GetComponent<MeteoriteObject>().ForWhichPlayer = p.tag;
     }
+
+    void setMeteoriteScore(MeteoriteObject meteorite)
+	{
+        meteorite.score=baseScore*meteorite.transform.localScale.x;
+}
 
     private void giveSpeedAndDirection(GameObject met, Player player)//初始速度以及方向调整
     {

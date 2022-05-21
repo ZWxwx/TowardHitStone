@@ -24,6 +24,9 @@ public class ItemEventManager : Singleton<ItemEventManager>
 			case ItemType.Interfere:
 				break;
 			case ItemType.Tracking:
+				PlayerBulletTracker tracker =PlayerControllerManager.Instance.playerControllers[owner].gameObject.AddComponent<PlayerBulletTracker>();
+				tracker.playerType = owner;
+				tracker.time = 5f;
 				break;
 			case ItemType.WhiteHole:
 				break;

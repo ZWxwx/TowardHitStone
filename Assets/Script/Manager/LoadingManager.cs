@@ -13,6 +13,10 @@ public class LoadingManager : MonoBehaviour
         User.Instance.player1_items.Add(new Item(ItemType.Explodable_nextBomb, PlayerType.Player1, count: 4, sprite: "Sprite/Icon1"));
         User.Instance.player1_items.Add(new Item(ItemType.Freezing, PlayerType.Player1));
         User.Instance.player2_items.Add(new Item(ItemType.None,  PlayerType.Player2, count: 5));
+        User.Instance.player2_items.Add(new Item(ItemType.Explodable_nextBomb, PlayerType.Player2, count: 2, sprite: "Sprite/Icon1"));
+        User.Instance.player2_items.Add(new Item(ItemType.Tracking, PlayerType.Player2, count: 3, sprite: "Sprite/Icon2"));
+        User.Instance.player2_items.Add(new Item(ItemType.Explodable_nextBomb, PlayerType.Player2, count: 4, sprite: "Sprite/Icon1"));
+        User.Instance.player2_items.Add(new Item(ItemType.Freezing, PlayerType.Player2));
         Load();
     }
     // Update is called once per frame

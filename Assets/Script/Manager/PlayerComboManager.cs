@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine.UI;
 
 public class PlayerComboManager:MonoBehaviour
 {
+	public PlayerType playerType;
 	public float comboTime;//combo持续时间，该时间内未摧毁任何陨石则comboNum清零，否则（摧毁陨石）则重置至该时间
 	public float iComboTime;
 	private int comboNum;
@@ -14,6 +16,8 @@ public class PlayerComboManager:MonoBehaviour
 	public float colorParam1;
 	public Color originColor;
 	public Color endColor;
+
+	public Action<float> addCombo;
 
 	public void Start()
 	{
@@ -28,13 +32,17 @@ public class PlayerComboManager:MonoBehaviour
 		set
 		{
 			comboNum = value;
-			comboNumText.text = string.Format("{0} combo!", comboNum);
+			comboNumText.text = string.Format("{0} combo!", comboNum.ToString());
 			if (value != 0)
 			{
 				resetTime();
 				comboNumText.color = value < colorParam1 ? new Color((endColor.r - originColor.r) * value / colorParam1 + originColor.r,
 					(endColor.g - originColor.g) * value / colorParam1 + originColor.g,
 					(endColor.b - originColor.b) * value / colorParam1 + originColor.b) : endColor;
+				if (addCombo != null)
+				{
+					addCombo(0.04f);
+				}
 			}
 			else
 			{
@@ -70,8 +78,8 @@ public class PlayerComboManager:MonoBehaviour
 		ComboNum = 0;
 	}
 
-	public void instantiateComboText(Transform transform, Vector3 offset)
-	{
-		comboNumText.gameObject.transform.position = transform.position + offset;
-	}
+	//public void instantiateComboText(Transform transform, Vector3 offset)
+	//{
+	//	comboNumText.gameObject.transform.position = transform.position + offset;
+	//}
 }

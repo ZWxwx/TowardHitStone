@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
     //前向量
     Vector3 forwardVector;
 
+    //图片角度/逻辑角度修正
+    public float angleFixed;
+
     //基础速度
     public float speed;
 
@@ -33,9 +36,9 @@ public class PlayerController : MonoBehaviour
 		set
 		{
             if (playerType == PlayerType.Player1)
-                angle = value > 90 ? 90 : value < -90 ? -90 : value;
+                angle = value > 90+angleFixed ? 90+angleFixed : value < -90+angleFixed ? -90+angleFixed : value;
             else if (playerType == PlayerType.Player2)
-                angle = value > 270 ? 270 : value < 90 ? 90 : value;
+                angle = value > 270+angleFixed ? 270+angleFixed : value < 90+angleFixed ? 90+angleFixed : value;
             transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y,angle);
         }
     }
@@ -44,7 +47,7 @@ public class PlayerController : MonoBehaviour
     public float rotateSpeed;
     //
     public GameObject bulletObjectPrefab;
-    public GameObject gunTubeObject;
+    //public GameObject gunTubeObject;
     public GameObject headPositionObject;
     public GameObject worldObject;
 
@@ -64,7 +67,7 @@ public class PlayerController : MonoBehaviour
             Angle += Input.GetAxis("Vertical_Player1") * Time.deltaTime * rotateSpeed;
         if (playerType == PlayerType.Player2)
             Angle -= Input.GetAxis("Vertical_Player2") * Time.deltaTime * rotateSpeed;
-        shotVector = headPositionObject.transform.position - gunTubeObject.transform.position;
+        shotVector = headPositionObject.transform.position - transform.position;
 		if (Input.GetButtonDown("Fire_Player1")&&playerType==PlayerType.Player1|| Input.GetButtonDown("Fire_Player2") && playerType == PlayerType.Player2)
 		{
             onShot();
@@ -74,7 +77,7 @@ public class PlayerController : MonoBehaviour
 
     void Shot()
     {
-        GameObject tmp=Instantiate(bulletObjectPrefab,gunTubeObject.transform.position, Quaternion.Euler(0,0,Angle), worldObject.transform);
+        GameObject tmp=Instantiate(bulletObjectPrefab,transform.position, Quaternion.Euler(0,0,Angle), worldObject.transform);
         tmp.GetComponent<Rigidbody2D>().velocity = shotVector * speed;
         tmp.GetComponent<BulletController>().speed = speed ;
         tmp.GetComponent<BulletController>().playerType = this.playerType;

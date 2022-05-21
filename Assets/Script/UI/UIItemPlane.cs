@@ -55,6 +55,30 @@ public class UIItemPlane : MonoBehaviour
         //        }
         //    }
         //}
+        else if (playerType == PlayerType.Player2)
+        {
+            for (int i = 0; i < ItemManager.Instance.itemsPlayer2.Count; i++)
+            {
+                if (slots[index].GetComponentsInChildren<UIItem>() != null)
+                {
+                    foreach (var kv in slots[i].GetComponentsInChildren<UIItem>())
+                    {
+                        Destroy(kv.gameObject);
+                    }
+
+                }
+                if (ItemManager.Instance.itemsPlayer2[i].count != 0)
+                {
+                    UIItem uiItem = Instantiate(itemPrefab, slots[index].transform).GetComponent<UIItem>();
+                    uiItem.item = ItemManager.Instance.itemsPlayer2[i];
+                    uiItem.item.OnUsed += uiItem.UpdateInfo;
+                    uiItem.itemPlane = this;
+                    uiItem.Init();
+                    index++;
+                }
+
+            }
+        }
     }
 
     public void Update()
