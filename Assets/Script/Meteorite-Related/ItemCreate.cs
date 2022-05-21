@@ -19,6 +19,13 @@ public class ItemCreate : MonoBehaviour
     {
         metSystem = gameObject.GetComponent<MeteoriteCreateSystem>();
     }
+    private void FixedUpdate()
+    {
+        if (isItemCreating)
+        {
+            CreateInMode(metSystem.cMode);
+        }
+    }
     [Header("道具生成频率(多少秒生成一个)")]
     public float ItemCreateQuency;
     [Header("道具生成频率的偏差值，单位为秒")]
@@ -72,18 +79,21 @@ public class ItemCreate : MonoBehaviour
 
     public GameObject CreateItem(MeteoriteCreateSystem.Player player)
     {
-        GameObject Item = metSystem.CreateItem(player,ItemObject);
-        giveSpeedAndDirection(Item, player);
-        return Item;
+        GameObject ItemIns = metSystem.CreateItem(player,ItemObject);
+        giveSpeedAndDirection(ItemIns, player);
+        ItemIns.GetComponent<RandomItemObj>().ForWhichPlayer = player.tag;
+        return ItemIns;
     }
     public GameObject CreateItem()
     {
-        GameObject Item = metSystem.CreateItem(metSystem.p1, ItemObject);
-        GameObject Item2 = metSystem.CreateItem(metSystem.p2, ItemObject);
-        Item2.transform.position = new Vector3(Item2.transform.position.x, Item.transform.position.y, 0);
-        giveSpeedAndDirection(Item, Item2);
-
-        return Item;
+        GameObject ItemIns = metSystem.CreateItem(metSystem.p1, ItemObject);
+        GameObject ItemIns2 = metSystem.CreateItem(metSystem.p2, ItemObject);
+        ItemIns2.transform.position = new Vector3(ItemIns2.transform.position.x, ItemIns.transform.position.y, 0);
+        giveSpeedAndDirection(ItemIns, ItemIns2);
+        ItemIns.GetComponent<RandomItemObj>().ForWhichPlayer = PlayerType.Player1;
+        ItemIns2.GetComponent<RandomItemObj>().ForWhichPlayer = PlayerType.Player2;
+        ItemIns.GetComponent<RandomItemObj>().itemContent = ItemIns2.GetComponent<RandomItemObj>().itemContent = ItemManager.Instance.ItemRandom();
+        return ItemIns;
     }
 
     private void CreateInMode(MeteoriteCreateSystem.creatingMode c)//理论上这串代码可以优化
@@ -126,11 +136,11 @@ public class ItemCreate : MonoBehaviour
                         if (p.itemCreateRate <= 0)
                         {
                             CreateItem(p);
-                            p.createRate = ItemCreateQuency + ItemQuencyDevince * Random.Range(-1f, 1f);
+                            p.itemCreateRate = ItemCreateQuency + ItemQuencyDevince * Random.Range(-1f, 1f);
                         }
                         else
                         {
-                            p.createRate -= Time.deltaTime;
+                            p.itemCreateRate -= Time.deltaTime;
                         }
                     }
                     CreateInline(metSystem.p1);

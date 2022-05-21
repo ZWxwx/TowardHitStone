@@ -258,6 +258,17 @@ MonoBehaviour:
   itemPlane1: {fileID: 316158624}
   itemPlane2: {fileID: 1029765106}
   itemPrefab: {fileID: 0}
+  BombChance: 0.2
+  FreezingChance: 0.2
+  InterfereChance: 0.2
+  TrackingChance: 0.2
+  WhiteHoleChance: 0.2
+  itemChance:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
 --- !u!114 &33866836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1503,6 +1514,7 @@ GameObject:
   m_Component:
   - component: {fileID: 531643114}
   - component: {fileID: 531643115}
+  - component: {fileID: 531643116}
   m_Layer: 0
   m_Name: MeteoriteSystem
   m_TagString: Untagged
@@ -1550,7 +1562,8 @@ MonoBehaviour:
   YspeedMax: 5
   MeteoriteSizeGeneral: 1.2
   MeteoriteSizeDevince: 0.6
-  CreateQuency: 0.1
+  targetWornHoleX: 0
+  CreateQuency: 1
   QuencyDevince: 0.2
   cMode: 3
   Area:
@@ -1560,7 +1573,32 @@ MonoBehaviour:
     vector2: {x: 0.5, y: 5}
   isCreating: 1
   moveareasSizePerHealth: 0.005
+  isLatencyMoveWornHole: 1
+  WornHoleLatencyTime: 3
   baseScore: 0
+--- !u!114 &531643116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 531643113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fa860b8ff0d5d14aa1b5ca027e5d28f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isItemCreating: 0
+  ItemObject: {fileID: 3970258498430966358, guid: 6e0d468571361b14ea6aba648b50f63b, type: 3}
+  ItemFather: {fileID: 0}
+  ItemCreateQuency: 5
+  ItemQuencyDevince: 5
+  ItemSizeGeneral: 1
+  ItemSizeDevince: 0
+  XspeedMin: 1
+  XspeedMax: 1
+  YspeedMin: 1
+  YspeedMax: 1
 --- !u!1 &538287568
 GameObject:
   m_ObjectHideFlags: 0

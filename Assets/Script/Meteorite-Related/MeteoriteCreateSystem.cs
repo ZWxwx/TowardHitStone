@@ -112,15 +112,16 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
             f.drawArea();
         }
 
-        if(isCreating)
-        {
-            CreateInMode(cMode);
-        }
+        
         
     }
     private void FixedUpdate()
     {
         lateMoveWornHole();
+        if (isCreating)
+        {
+            CreateInMode(cMode);
+        }
     }
 
 #if UNITY_EDITOR
@@ -150,7 +151,7 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
                     }
                     else 
                     {
-                        p1.createRate -= Time.deltaTime;
+                        p1.createRate -= Time.fixedDeltaTime;
                     }
                     break;
                 }
@@ -164,7 +165,7 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
                     }
                     else
                     {
-                        p1.createRate -= Time.deltaTime;
+                        p1.createRate -= Time.fixedDeltaTime;
                     }
 
                     break;
@@ -180,7 +181,7 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
                         }
                         else
                         {
-                            p.createRate -= Time.deltaTime;
+                            p.createRate -= Time.fixedDeltaTime;
                         }
                     }
                     CreateInline(p1);
@@ -372,6 +373,7 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         p1.Area = newAreaLeft;
         p2.Area = newAreaRight;
     } //预留的 似乎没啥用....
+    #region 虫洞移动相关
     private WornHole WormHoleObj;
     public void moveArea(PlayerType playerTag, float value) //让两个区域一起移动x距离
     {
@@ -417,13 +419,13 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         {
             if (WornHoleLateMoveTime > 0)
             {
-               // Debug.Log(WornHoleLateMoveTime);
+                Debug.Log(WornHoleLateMoveTime);
                 p1.Area.vector1.x += WornHoleLateMoveSpeed;
                 p1.Area.vector2.x += WornHoleLateMoveSpeed;
                 p2.Area.vector1.x += WornHoleLateMoveSpeed;
                 p2.Area.vector2.x += WornHoleLateMoveSpeed;
                 WormHoleObj.move(WornHoleLateMoveSpeed);
-                WornHoleLateMoveTime -= Time.deltaTime;
+                WornHoleLateMoveTime -= Time.fixedDeltaTime;
                 if (Mathf.Abs((targetWornHoleX - WormHoleObj.transform.position.x)) < 0.005f)
                 {
                     WornHoleLateMoveTime = 0;
@@ -432,7 +434,7 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
                     p2.Area.vector1.x = targetWornHoleX;
                     p2.Area.vector2.x = targetWornHoleX;
                     WormHoleObj.transform.position=new Vector3(targetWornHoleX, WormHoleObj.transform.position.y, WormHoleObj.transform.position.z);
-                    //Debug.Log("距离达到而停止");
+                    Debug.Log("距离达到而停止");
                 }
             }
           
@@ -443,7 +445,7 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
     {
         moveArea(PlayerType.Player1,1000f);
     }
-
+    #endregion
     /// <summary>
     /// 提供给物品生成的脚本
     /// </summary>
@@ -455,7 +457,7 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         {
             return (player.Area.vector1.x + player.Area.vector2.x) / 2;
         }
-        GameObject item;
+        GameObject itemIns;
         Transform tr;
         if (itemCreateSystem.ItemFather == null) //如果父对象没有 则以系统本身为父对象
         {
@@ -465,10 +467,10 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         {
             tr = itemCreateSystem.ItemFather.transform;
         }
-        item = Instantiate(itemPrefeb, tr.position, Quaternion.Euler(0, 0, Random.Range(0, 360)), tr);//生成物品对象
+        itemIns = Instantiate(itemPrefeb, tr.position, Quaternion.Euler(0, 0, Random.Range(0, 360)), tr);//生成物品对象
         var t = RandomPosGenerateForY(player.Area);
-        item.transform.position = new Vector3(getX(), t, 0);
-        giveSpeedAndDirection(item, player);
+        itemIns.transform.position = new Vector3(getX(), t, 0);
+        giveSpeedAndDirection(itemIns, player);
         //setMeteroiteSize(item);
         //setMeteoriteScore(met.GetComponent<MeteoriteObject>());
         //Debug.Log(t);
@@ -478,7 +480,7 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         //    addNewMeteorite(item.GetComponent<MeteoriteObject>());
         //}
 
-        return item;
+        return itemIns;
     }
 
     public class Player//玩家类
