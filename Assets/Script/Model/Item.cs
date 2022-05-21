@@ -42,6 +42,7 @@ public class Item
 			UseAction(itemType,owner);
 			OnUsed();
 			Debug.LogFormat("{0}使用了{1}", owner.ToString(), itemType.ToString());
+			ItemTip.Instance.text.text = string.Format("{0}使用了{1}", owner.ToString(), itemType.ToString());
 			return true;
 		}
 		return false;

@@ -69,9 +69,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -922591099
+  m_SortingLayer: 1
+  m_SortingOrder: 2000
   m_Sprite: {fileID: 21300000, guid: ba8db8d967415f745805834d19a039e1, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -170,9 +170,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -922591099
+  m_SortingLayer: 1
+  m_SortingOrder: 1000
   m_Sprite: {fileID: 21300000, guid: ee8261317c1ff734daa9da91d24312b3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -217,6 +217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df19db03057f7dc4492c1981e566b5e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  score: 0
   ForWhichPlayer: 0
   healthBar: {fileID: 3732515883445190818}
 --- !u!61 &2217457469667018640
