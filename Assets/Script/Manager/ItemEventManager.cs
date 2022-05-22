@@ -34,6 +34,10 @@ public class ItemEventManager : Singleton<ItemEventManager>
 				break;
 			case ItemType.WhiteHole:
 				var tmp= Instantiate(WhiteHole,transform).GetComponent<PlayerWhiteHole>();
+				if (owner == PlayerType.Player2)
+				{
+					tmp.transform.localScale = new Vector2(-tmp.transform.localScale.x, tmp.transform.localScale.y);
+				}
 				tmp.forWhichPlayer = owner;
 				tmp.bulletSpeed = WhiteHoleBulletSpeed;
 				break;
@@ -55,5 +59,6 @@ public class ItemEventManager : Singleton<ItemEventManager>
 		var tmp = Instantiate(WhiteHole, transform).GetComponent<PlayerWhiteHole>();
 		tmp.forWhichPlayer = PlayerType.Player2;
 		tmp.bulletSpeed = WhiteHoleBulletSpeed;
+		tmp.transform.localScale = new Vector2(-tmp.transform.localScale.x, tmp.transform.localScale.y);
 	}
 }
