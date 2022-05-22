@@ -8,6 +8,7 @@ TagManager:
   - Bullet
   - Meteorite
   - ItemMet
+  - WhiteHoleBullet
   layers:
   - Default
   - TransparentFX
@@ -18,8 +19,8 @@ TagManager:
   - Meteorite
   - Bullet
   - ItemMet
-  - 
-  - 
+  - WhiteHoleBullet
+  - Player
   - 
   - 
   - 

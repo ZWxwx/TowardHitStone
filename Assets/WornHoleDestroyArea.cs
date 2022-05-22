@@ -33,7 +33,12 @@ public class WornHoleDestroyArea : MonoBehaviour
 							Destroy(collision.gameObject);
 						}
 						break;
-
+					case "WhiteHoleBullet":
+						if (collision.gameObject.GetComponent<WhiteHoleBullet>().ForWhichPlayer == playerToDestroy)
+						{
+							Destroy(collision.gameObject);
+						}
+						break;
 					default:
 						break;
 				}

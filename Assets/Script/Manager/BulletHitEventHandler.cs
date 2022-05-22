@@ -27,5 +27,11 @@ public class BulletHitEventHandler : Singleton<BulletHitEventHandler>
 			target.GetComponent<RandomItemObj>().ItemBonusGet();
 			Destroy(target);
 		}
+		else if (target.tag == "WhiteHoleBullet")
+		{
+			target.GetComponentInChildren<WhiteHoleBulletHealthBar>().CurrentHealth -= 20;
+			Destroy(bullet.gameObject);
+		}
+		
 	}
 }

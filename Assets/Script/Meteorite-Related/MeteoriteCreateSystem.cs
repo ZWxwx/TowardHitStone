@@ -419,7 +419,7 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
         {
             if (WornHoleLateMoveTime > 0)
             {
-                Debug.Log(WornHoleLateMoveTime);
+               // Debug.Log(WornHoleLateMoveTime);
                 p1.Area.vector1.x += WornHoleLateMoveSpeed;
                 p1.Area.vector2.x += WornHoleLateMoveSpeed;
                 p2.Area.vector1.x += WornHoleLateMoveSpeed;
@@ -434,7 +434,7 @@ public class MeteoriteCreateSystem : Singleton<MeteoriteCreateSystem>
                     p2.Area.vector1.x = targetWornHoleX;
                     p2.Area.vector2.x = targetWornHoleX;
                     WormHoleObj.transform.position=new Vector3(targetWornHoleX, WormHoleObj.transform.position.y, WormHoleObj.transform.position.z);
-                    Debug.Log("距离达到而停止");
+                    //Debug.Log("距离达到而停止");
                 }
             }
           

@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class ItemEventManager : Singleton<ItemEventManager>
 {
+	[SerializeField]
+	GameObject WhiteHole;
+	[SerializeField]
+	float WhiteHoleBulletSpeed;
 	public void OnItemUsed(ItemType type,PlayerType owner)
 	{
 		switch (type)
@@ -29,9 +33,27 @@ public class ItemEventManager : Singleton<ItemEventManager>
 				tracker.time = 5f;
 				break;
 			case ItemType.WhiteHole:
+				var tmp= Instantiate(WhiteHole,transform).GetComponent<PlayerWhiteHole>();
+				tmp.forWhichPlayer = owner;
+				tmp.bulletSpeed = WhiteHoleBulletSpeed;
 				break;
 			default:
 				break;
 		}
+	}
+
+	[EditorButton]
+	void whiteHoleItemDebug()
+    {
+		var tmp = Instantiate(WhiteHole, transform).GetComponent<PlayerWhiteHole>();
+		tmp.forWhichPlayer = PlayerType.Player1;
+		tmp.bulletSpeed = WhiteHoleBulletSpeed;
+	}
+	[EditorButton]
+	void whiteHoleItemDebug2()
+	{
+		var tmp = Instantiate(WhiteHole, transform).GetComponent<PlayerWhiteHole>();
+		tmp.forWhichPlayer = PlayerType.Player2;
+		tmp.bulletSpeed = WhiteHoleBulletSpeed;
 	}
 }
