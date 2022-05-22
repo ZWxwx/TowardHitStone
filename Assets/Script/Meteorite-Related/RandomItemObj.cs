@@ -25,11 +25,11 @@ public class RandomItemObj : MonoBehaviour
         }
         if (ForWhichPlayer == PlayerType.Player1)
         {
-            ItemManager.Instance.itemsPlayer1.Add(new Item(itemContent, ForWhichPlayer));
+            ItemManager.Instance.AddToItemPlayer1(new Item(itemContent, ForWhichPlayer));
         }
         else
         {
-            ItemManager.Instance.itemsPlayer2.Add(new Item(itemContent, ForWhichPlayer));
+            ItemManager.Instance.AddToItemPlayer2(new Item(itemContent, ForWhichPlayer));
         }
         Debug.Log("Ìá¹©Íæ¼Ò"+ForWhichPlayer.ToString()+itemContent.ToString());
         Destroy(gameObject);

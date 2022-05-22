@@ -1,11 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemManager : Singleton<ItemManager>
 {
-    public List<Item> itemsPlayer1 = new List<Item>();
+	public List<Item> itemsPlayer1 = new List<Item>();
+    //public List<Item> ItemsPlayer1 { get => itemsPlayer1; set{ itemsPlayer1 = value; onItemListUpdate(itemsPlayer1,PlayerType.Player1); } }
     public List<Item> itemsPlayer2 = new List<Item>();
+    //public List<Item> ItemsPlayer2 { get => itemsPlayer2; set { itemsPlayer2 = value; onItemListUpdate(itemsPlayer2, PlayerType.Player2); } }
     public GameObject itemPlane1;
     public GameObject itemPlane2;
     public GameObject itemPrefab;
@@ -29,7 +32,10 @@ public class ItemManager : Singleton<ItemManager>
     const int itemNum = 5;
     [HideInInspector]
     public float[] itemChance = new float[itemNum];
-    private void Awake()
+
+    public Action<List<Item>,PlayerType> onItemListUpdate;
+
+	private void Awake()
     {
         setChance();
     }
@@ -56,7 +62,7 @@ public class ItemManager : Singleton<ItemManager>
     }
     public ItemType ItemRandom()
     {
-        float randomNum = Random.Range(0f, 1f);
+        float randomNum = UnityEngine.Random.Range(0f, 1f);
         int itemChoose;
         for(itemChoose=0; itemChoose < itemNum;++itemChoose)
         {
@@ -66,7 +72,7 @@ public class ItemManager : Singleton<ItemManager>
                 break;
             }
         }
-        return (ItemType)randomNum + 1;
+        return (ItemType)itemChoose+1;
         
     }
 
@@ -85,6 +91,7 @@ public class ItemManager : Singleton<ItemManager>
 		{
             itemsPlayer1.Add(item);
 		}
+        onItemListUpdate(itemsPlayer1, PlayerType.Player1);
     }
 
     public void AddToItemPlayer2(Item item)
@@ -103,6 +110,7 @@ public class ItemManager : Singleton<ItemManager>
         {
             itemsPlayer2.Add(item);
         }
+        onItemListUpdate(itemsPlayer2, PlayerType.Player2);
     }
 
 }

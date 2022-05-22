@@ -22,5 +22,10 @@ public class BulletHitEventHandler : Singleton<BulletHitEventHandler>
 			//ComboManager.Instance.playerComboManagers[bullet.playerType].instantiateComboText(target.transform, new Vector3(0, 1, 0));
 			//MeteoriteCreateSystem.Instance.moveArea(bullet.playerType);//÷¥––≥Ê∂¥“∆∂Ø÷∏¡Ó
 		}
+		else if (target.tag == "ItemMet")
+		{
+			target.GetComponent<RandomItemObj>().ItemBonusGet();
+			Destroy(target);
+		}
 	}
 }

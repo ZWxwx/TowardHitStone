@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 7123715488608388569}
   - component: {fileID: -7014278523720868148}
   - component: {fileID: 1416943795757017134}
-  m_Layer: 0
+  - component: {fileID: -3091895470404534920}
+  m_Layer: 8
   m_Name: RandomItem
-  m_TagString: Untagged
+  m_TagString: ItemMet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -117,3 +118,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 897b32862bede44419e3e7a7b60bd130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemContent: 0
+  ForWhichPlayer: 0
+  health: 0
+--- !u!58 &-3091895470404534920
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3970258498430966358}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.64

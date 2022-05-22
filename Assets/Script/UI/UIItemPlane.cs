@@ -8,7 +8,22 @@ public class UIItemPlane : MonoBehaviour
     public List<GameObject> slots;
     public GameObject itemPrefab;
     public PlayerType playerType;
-	public void UpdateInfo()
+
+	public void Start()
+	{
+        ItemManager.Instance.onItemListUpdate += UpdateInfo;
+	}
+
+    public void UpdateInfo(List<Item> items,PlayerType playerType)
+	{
+        if (playerType == this.playerType)
+        {
+            UpdateInfo();
+        }
+	}
+
+
+    public void UpdateInfo()
 	{
         int index=0;
         if (playerType == PlayerType.Player1) {
